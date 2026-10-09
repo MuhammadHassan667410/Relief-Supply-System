@@ -1,31 +1,19 @@
-// =====================================================================
-//  EARTHQUAKE RELIEF SUPPLY DISTRIBUTION SYSTEM   (course-level version)
-// =====================================================================
-//  Uses only what we studied: cin, cout, variables, const, if / else if,
-//  switch, ternary (?:), while / for loops, break.
-//
-//  HOW TO CHANGE THE SYSTEM
-//  ------------------------
-//  Every number lives in the SETTINGS section below.
-//  Change a number there and recompile. You do NOT need to touch any
-//  other part of the program: the welcome screen, the score and the
-//  relief decisions all read their numbers from the settings.
-// =====================================================================
+//  EARTHQUAKE RELIEF SUPPLY DISTRIBUTION SYSTEM
 
 #include <iostream>
 #include <string>
 using namespace std;
 
-// =====================================================================
-//  SETTINGS  (the only part you need to edit)
-// =====================================================================
+// First we will initialize and declare all constant variables that will be used throughout the program. 
+// These constants will be used to determine the starting stock, menu codes, need-score points, relief level codes, 
+// minimum score needed for each relief level, and what each relief level gives.
 
-// ---- 1. Starting stock ----
+//1. Starting stock 
 const int START_TRUCKS = 10;
 const int START_PACKS  = 200;
 const int START_STAFF  = 20;
 
-// ---- 2. Menu codes (the number typed for each menu choice) ----
+// 2. Menu codes
 const int AREA_PLAIN       = 1;
 const int AREA_MOUNTAINOUS = 2;
 const int AREA_COASTAL     = 3;
@@ -34,21 +22,20 @@ const int DAMAGE_LOW    = 1;
 const int DAMAGE_MEDIUM = 2;
 const int DAMAGE_HIGH   = 3;
 
-// ---- 3. Need-score points (a negative number takes points away) ----
+// 3. Need-score points
 // Area type
 const int POINTS_PLAIN       = 10;
-const int POINTS_MOUNTAINOUS = 20;
+const int POINTS_MOUNTAINOUS = 15;
 const int POINTS_COASTAL     = 15;
 
 // Affected families: each MAX is the TOP of a band
-//   band 1 = 0 to 20, band 2 = 21 to 50, band 3 = 51 to 100, band 4 = above
+//   band 1 = 0 to 20, band 2 = 21 to 50, band 3 = 50 and above
 const int FAMILIES_BAND1_MAX = 20;
 const int FAMILIES_BAND2_MAX = 50;
-const int FAMILIES_BAND3_MAX = 100;
+const int FAMILIES_BAND3_MAX = 10000;
 const int POINTS_FAMILIES_BAND1 = 5;
-const int POINTS_FAMILIES_BAND2 = 15;
-const int POINTS_FAMILIES_BAND3 = 10;
-const int POINTS_FAMILIES_BAND4 = 5;
+const int POINTS_FAMILIES_BAND2 = 10;
+const int POINTS_FAMILIES_BAND3 = 15;
 const int MAX_FAMILIES_ALLOWED  = 10000;   // largest number accepted as input
 
 // Medical aid needed?
@@ -60,7 +47,7 @@ const int POINTS_ROUTE_OPEN    = 10;
 const int POINTS_ROUTE_BLOCKED = -15;
 
 // Are aftershocks expected?
-const int POINTS_AFTERSHOCK_YES = 5;
+const int POINTS_AFTERSHOCK_YES = 10;
 const int POINTS_AFTERSHOCK_NO  = 15;
 
 // Damage level
@@ -76,41 +63,34 @@ const int POINTS_AID_RECEIVED_NO  = 10;
 const int MIN_SCORE = 0;
 const int MAX_SCORE = 100;
 
-// ---- 4. Relief level codes (0 = biggest relief, 4 = smallest) ----
+//4. Relief level codes
 // When stock runs low the program steps down: 0 -> 1 -> 2 -> 3 -> 4
 const int FULL_RELIEF     = 0;
 const int STANDARD_RELIEF = 1;
 const int MID_RELIEF      = 2;
 const int LOW_RELIEF      = 3;
-const int DEFER           = 4;   // nothing is sent, area is monitored
+const int DEFER           = 4;   // nothing is sent
 
-// ---- 5. Minimum score needed for each relief level ----
+//5. Minimum score needed for each relief level
 const int THRESHOLD_FULL     = 90;
 const int THRESHOLD_STANDARD = 70;
 const int THRESHOLD_MID      = 50;
 const int THRESHOLD_LOW      = 20;
 // anything below THRESHOLD_LOW is Defer
 
-// ---- 6. What each relief level gives ----
+//6. What each relief level gives
 const int FULL_TRUCKS     = 3;   const int FULL_PACKS     = 50;   const int FULL_STAFF     = 5;
 const int STANDARD_TRUCKS = 2;   const int STANDARD_PACKS = 30;   const int STANDARD_STAFF = 3;
 const int MID_TRUCKS      = 1;   const int MID_PACKS      = 20;   const int MID_STAFF      = 2;
 const int LOW_TRUCKS      = 1;   const int LOW_PACKS      = 10;   const int LOW_STAFF      = 1;
 const int DEFER_TRUCKS    = 0;   const int DEFER_PACKS    = 0;    const int DEFER_STAFF    = 1;
 
-// =====================================================================
-//  PROGRAM  (no need to edit anything below this line)
-// =====================================================================
+// MAIN PROGRAM 
 int main() {
-
-    // =================================================================
     //  PART 1: WELCOME SCREEN
     //  All numbers printed here come from the settings above, so this
     //  screen updates by itself when a setting is changed.
-    // =================================================================
-    cout << "============================================================\n";
-    cout << "             EARTHQUAKE RELIEF SUPPLY SYSTEM\n";
-    cout << "============================================================\n";
+    cout << "EARTHQUAKE RELIEF SUPPLY SYSTEM\n";
     cout << "Welcome. This system distributes limited relief supplies fairly\n";
     cout << "by calculating a need score for each affected area.\n\n";
 
@@ -141,8 +121,7 @@ int main() {
          << showpos << POINTS_FAMILIES_BAND2 << ",\n                     "
          << noshowpos << FAMILIES_BAND2_MAX + 1 << "-" << FAMILIES_BAND3_MAX << " = "
          << showpos << POINTS_FAMILIES_BAND3 << ", over "
-         << noshowpos << FAMILIES_BAND3_MAX << " = "
-         << showpos << POINTS_FAMILIES_BAND4 << "\n";
+         << noshowpos << FAMILIES_BAND3_MAX << " = ";
 
     cout << "Medical aid needed:  Yes = " << POINTS_MEDICAL_YES
          << ", No = " << POINTS_MEDICAL_NO << "\n";
@@ -224,9 +203,7 @@ int main() {
     cout << "- Confirm road access before dispatching trucks and coordinate medical\n";
     cout << "  staff with the receiving relief team.\n";
 
-    // =================================================================
-    //  PART 2: STARTING STOCK (fixed, taken from SETTINGS)
-    // =================================================================
+    //STARTING STOCK 
     // These three variables are the "warehouse". They go down every time
     // relief is given.
     int trucksLeft = START_TRUCKS;
@@ -240,55 +217,49 @@ int main() {
     cout << "\nStarting stock: " << START_TRUCKS << " trucks, " << START_PACKS
          << " supply packs, " << START_STAFF << " medical staff.\n";
 
-    // =================================================================
-    //  PART 3: COUNTERS FOR THE FINAL SUMMARY
-    // =================================================================
+    //COUNTERS FOR THE FINAL SUMMARY
     int requestCount  = 0;   // how many requests were processed
     int servedFully   = 0;   // got the level their score earned
     int servedReduced = 0;   // got something, but less than earned
     int deferred      = 0;   // got nothing (deferred)
 
-    // =================================================================
-    //  PART 4: PROCESS REQUESTS (repeat until the user says stop)
-    // =================================================================
+    // PROCESS REQUESTS. It will repeat until the user says stop
     bool anotherRequest = true;
     while (anotherRequest) {
         requestCount++;
-        cout << "\n--- Enter the details of request #" << requestCount << " ---\n";
+        cout << "\nEnter the details of request #" << requestCount << endl;
 
-        // -------------------------------------------------------------
-        //  4a. READ THE INPUTS
-        // -------------------------------------------------------------
+        // READ THE INPUTS
 
         // Area name (getline also accepts spaces)
         string areaName;
         cout << "Name of the affected area: ";
         getline(cin, areaName);
-        if (areaName == "") {                  // user just pressed Enter
+        if (areaName == "") {   // user just pressed Enter
             areaName = "Unnamed area";
         }
 
         // Area type
         int areaType = 0;
-        while (true) {
+        while (true) {   // keep asking until the answer is valid
             cout << "Area type (1=Plain, 2=Mountainous, 3=Coastal): ";
             cin >> value;
-            if (cin.eof()) {
+            if (cin.eof()) {   // no input left, so stop instead of looping forever
                 cout << "\nInput ended. Program stopped.\n";
                 return 0;
             }
-            if (cin.fail()) {
-                cin.clear();
-                cin.ignore(1000, '\n');
+            if (cin.fail()) {   // user typed letters instead of a number
+                cin.clear();    // repair cin so it can read again
+                cin.ignore(1000, '\n');  // throw away the bad text
                 cout << "  Invalid input. Please type a number.\n";
-            } else if (value < AREA_PLAIN || value > AREA_COASTAL) {
-                cin.ignore(1000, '\n');
+            } else if (value < AREA_PLAIN || value > AREA_COASTAL) { // number is outside the allowed range
+                cin.ignore(1000, '\n'); // remove the leftover Enter key
                 cout << "  Please type a number from " << AREA_PLAIN
                      << " to " << AREA_COASTAL << ".\n";
-            } else {
-                cin.ignore(1000, '\n');
-                areaType = value;
-                break;
+            } else {   // valid answer
+                cin.ignore(1000, '\n');     // remove the leftover Enter key
+                areaType = value;  // save the answer
+                break;    // leave the loop
             }
         }
 
@@ -423,9 +394,7 @@ int main() {
             }
         }
 
-        // -------------------------------------------------------------
-        //  4b. CALCULATE THE NEED SCORE (add the points of every answer)
-        // -------------------------------------------------------------
+        //CALCULATE THE NEED SCORE (add/subtract the points of every answer)
         int score = 0;
 
         // Area type
@@ -435,15 +404,13 @@ int main() {
             case AREA_COASTAL:     score += POINTS_COASTAL;     break;
         }
 
-        // Affected families (4 bands, checked from the smallest band up)
+        // Affected families (3 bands, checked from the smallest band up)
         if (families <= FAMILIES_BAND1_MAX) {
             score += POINTS_FAMILIES_BAND1;
         } else if (families <= FAMILIES_BAND2_MAX) {
             score += POINTS_FAMILIES_BAND2;
-        } else if (families <= FAMILIES_BAND3_MAX) {
-            score += POINTS_FAMILIES_BAND3;
         } else {
-            score += POINTS_FAMILIES_BAND4;
+            score += POINTS_FAMILIES_BAND3;
         }
 
         // Medical aid
@@ -489,10 +456,8 @@ int main() {
             score = MAX_SCORE;
         }
 
-        // -------------------------------------------------------------
-        //  4c. FIND THE RELIEF LEVEL THE SCORE EARNS
+        // FIND T THE RELIEF LEVEL THE SCORE EARNS
         //      (checked from the highest limit down, first match wins)
-        // -------------------------------------------------------------
         int wantedLevel;
         if (score >= THRESHOLD_FULL) {
             wantedLevel = FULL_RELIEF;
@@ -535,12 +500,10 @@ int main() {
                 break;
         }
 
-        // -------------------------------------------------------------
-        //  4d. CHECK THE STOCK
-        //      Start at the earned level. If the stock cannot cover it,
-        //      step DOWN one level at a time until something fits.
-        //      DEFER is the last step and is always allowed.
-        // -------------------------------------------------------------
+        //  CHECK THE STOCK
+        //  Start at the earned level. If the stock cannot cover it,
+        //  step DOWN one level at a time until something fits.
+        //  DEFER is the last step and is always allowed.
         int givenLevel = wantedLevel;
         int trucksUsed = 0;
         int packsUsed  = 0;
@@ -592,17 +555,13 @@ int main() {
         int packsBefore  = packsLeft;
         int staffBefore  = staffLeft;
 
-        // -------------------------------------------------------------
-        //  4e. SUBTRACT WHAT WAS USED FROM THE STOCK
-        //      The NEXT request will see the new values.
-        // -------------------------------------------------------------
+        // SUBTRACT WHAT WAS USED FROM THE STOCK
+        //  The NEXT request will see the new values.
         trucksLeft -= trucksUsed;
         packsLeft  -= packsUsed;
         staffLeft  -= staffUsed;
 
-        // -------------------------------------------------------------
-        //  4f. UPDATE THE SUMMARY COUNTERS
-        // -------------------------------------------------------------
+        // UPDATE THE SUMMARY COUNTERS
         if (givenLevel == DEFER) {
             deferred++;                    // got nothing
         } else if (givenLevel == wantedLevel) {
@@ -611,12 +570,8 @@ int main() {
             servedReduced++;               // got a smaller level
         }
 
-        // -------------------------------------------------------------
-        //  4g. SHOW THE REQUEST DETAILS
-        // -------------------------------------------------------------
-        cout << "\n============================================================\n";
-        cout << " REQUEST #" << requestCount << " : " << areaName << "\n";
-        cout << "============================================================\n";
+        // SHOW THE REQUEST DETAILS
+        cout << " REQUEST #" << requestCount << " : " << areaName << endl;
 
         cout << " Area type            : ";
         switch (areaType) {
@@ -624,14 +579,13 @@ int main() {
             case AREA_MOUNTAINOUS: cout << "Mountainous"; break;
             case AREA_COASTAL:     cout << "Coastal";     break;
         }
-        cout << "\n";
-
-        cout << " Affected families    : " << families << "\n";
+        cout << endl;
+        cout << " Affected families    : " << families << endl;
 
         // (condition ? textIfTrue : textIfFalse) is the short if-else
-        cout << " Medical aid needed   : " << (medicalAid ? "Yes" : "No") << "\n";
-        cout << " Road to the area     : " << (routeOpen ? "Open" : "Blocked") << "\n";
-        cout << " Aftershocks expected : " << (aftershocks ? "Yes" : "No") << "\n";
+        cout << " Medical aid needed   : " << (medicalAid ? "Yes" : "No") << endl;
+        cout << " Road to the area     : " << (routeOpen ? "Open" : "Blocked") << endl;
+        cout << " Aftershocks expected : " << (aftershocks ? "Yes" : "No") << endl;
 
         cout << " Damage level         : ";
         switch (damage) {
@@ -639,16 +593,14 @@ int main() {
             case DAMAGE_MEDIUM: cout << "Medium"; break;
             case DAMAGE_HIGH:   cout << "High";   break;
         }
-        cout << "\n";
+        cout << endl;
 
-        cout << " Aid already received : " << (aidReceived ? "Yes" : "No") << "\n";
+        cout << " Aid already received : " << (aidReceived ? "Yes" : "No") << endl;
 
-        // -------------------------------------------------------------
-        //  4h. SHOW THE DECISION
-        // -------------------------------------------------------------
+        // SHOW THE DECISION
         cout << "------------------------------------------------------------\n";
-        cout << " NEED SCORE           : " << score << " / " << MAX_SCORE << "\n";
-        cout << " Level this score earns: " << wantedName << "\n";
+        cout << " NEED SCORE           : " << score << " / " << MAX_SCORE << endl;
+        cout << " Level this score earns: " << wantedName << endl;
 
         if (givenLevel != wantedLevel) {
             // The stock was too low, so a smaller level was given. Say WHY.
@@ -662,26 +614,24 @@ int main() {
             if (wantStaff > staffBefore) {
                 cout << "medical staff (need " << wantStaff << ", have " << staffBefore << ")  ";
             }
-            cout << "\n";
-            cout << " >> Stepped down from " << wantedName << " to " << givenName << "\n";
+            cout << endl;
+            cout << " >> Stepped down from " << wantedName << " to " << givenName << endl;
         } else if (givenLevel == DEFER) {
             // The score itself was low; this has nothing to do with the stock.
-            cout << " >> Reason            : need score is below " << THRESHOLD_LOW
+            cout << " >> Reason       : need score is below " << THRESHOLD_LOW
                  << " (low priority)\n";
         }
 
-        cout << " ACTION TAKEN         : " << givenName << "\n";
-        cout << " Trucks used          : " << trucksUsed << "\n";
-        cout << " Supply packs used    : " << packsUsed << "\n";
-        cout << " Medical staff used   : " << staffUsed << "\n";
+        cout << " ACTION TAKEN         : " << givenName << endl;
+        cout << " Trucks used          : " << trucksUsed << endl;
+        cout << " Supply packs used    : " << packsUsed << endl;
+        cout << " Medical staff used   : " << staffUsed << endl;
         cout << "------------------------------------------------------------\n";
         cout << " REMAINING STOCK  ->  Trucks: " << trucksLeft
              << "\tPacks: " << packsLeft
-             << "\tStaff: " << staffLeft << "\n";
+             << "\tStaff: " << staffLeft << endl;
 
-        // -------------------------------------------------------------
-        //  4i. ASK WHETHER TO CONTINUE
-        // -------------------------------------------------------------
+        // ASK WHETHER TO CONTINUE
         while (true) {
             cout << "\nEnter another request? (y/n): ";
             cin >> answer;
@@ -702,23 +652,17 @@ int main() {
         }
     }
 
-    // =================================================================
-    //  PART 5: FINAL SUMMARY
-    // =================================================================
+    //FINAL SUMMARY
     int handled = servedFully + servedReduced;   // requests that got some relief
 
-    cout << "\n============================================================\n";
     cout << "                        SUMMARY\n";
-    cout << "============================================================\n";
-    cout << " Total requests processed        : " << requestCount << "\n";
-    cout << " Served at the level they earned : " << servedFully << "\n";
-    cout << " Served with REDUCED relief      : " << servedReduced << "\n";
-    cout << " Deferred / could not be served  : " << deferred << "\n";
-    cout << " Successfully handled (got relief): " << handled << " of " << requestCount << "\n";
+    cout << " Total requests processed        : " << requestCount << endl;
+    cout << " Served at the level they earned : " << servedFully << endl;
+    cout << " Served with REDUCED relief      : " << servedReduced << endl;
+    cout << " Deferred / could not be served  : " << deferred << endl;
+    cout << " Successfully handled (got relief): " << handled << " of " << requestCount << endl;
     cout << "------------------------------------------------------------\n";
     cout << " Stock left at the end ->\tTrucks: " << trucksLeft
-         << "\tPacks: " << packsLeft << "\tStaff: " << staffLeft << "\n";
-    cout << "============================================================\n";
-
+         << "\tPacks: " << packsLeft << "\tStaff: " << staffLeft << endl;
     return 0;   // 0 = finished without errors
 }
