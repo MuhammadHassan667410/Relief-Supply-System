@@ -87,9 +87,7 @@ const int DEFER_TRUCKS    = 0;   const int DEFER_PACKS    = 0;    const int DEFE
 
 // MAIN PROGRAM 
 int main() {
-    //  PART 1: WELCOME SCREEN
-    //  All numbers printed here come from the settings above, so this
-    //  screen updates by itself when a setting is changed.
+    //  WELCOME INSTRUCTIONS
     cout << R"(EARTHQUAKE RELIEF SUPPLY SYSTEM
 Welcome. This system distributes limited relief supplies fairly
 by calculating a need score for each affected area.
@@ -144,7 +142,7 @@ IMPORTANT NOTES
     int  value;    // holds a number typed by the user
     char answer;   // holds the y or n typed by the user
 
-    // The stock is fixed: it always starts with the numbers in SETTINGS.
+    // The initial stck is printed here so the user can see what is available before entering requests.
     cout << "\nStarting stock: " << START_TRUCKS << " trucks, " << START_PACKS
          << " supply packs, " << START_STAFF << " medical staff.\n";
 
