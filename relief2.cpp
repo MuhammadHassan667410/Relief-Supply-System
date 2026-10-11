@@ -90,118 +90,49 @@ int main() {
     //  PART 1: WELCOME SCREEN
     //  All numbers printed here come from the settings above, so this
     //  screen updates by itself when a setting is changed.
-    cout << "EARTHQUAKE RELIEF SUPPLY SYSTEM\n";
-    cout << "Welcome. This system distributes limited relief supplies fairly\n";
-    cout << "by calculating a need score for each affected area.\n\n";
-
-    cout << "HOW TO USE THE SYSTEM\n";
-    cout << "1. Enter the name of the affected area.\n";
-    cout << "2. Choose the area type and enter the number of affected families.\n";
-    cout << "3. Answer each Yes/No question exactly as requested (y or n).\n";
-    cout << "4. Select the damage level (Low, Medium, or High).\n";
-    cout << "5. The system adds the points for every answer and calculates\n";
-    cout << "   the area's total need score (" << MIN_SCORE << " to " << MAX_SCORE << ").\n";
-    cout << "6. Supplies are assigned from the need score. Whatever is given is\n";
-    cout << "   removed from the stock, so the next area receives what is left.\n\n";
-
-    // showpos makes cout print a + sign in front of positive numbers
-    // (+10, +5 ...). Negative numbers always show their own - sign.
-    // noshowpos switches the + sign off again.
-    cout << "INPUTS AND NEED-SCORE POINTS\n";
-    cout << showpos;
-    cout << "Area type:           Plain = " << POINTS_PLAIN
-         << ", Mountainous = " << POINTS_MOUNTAINOUS
-         << ", Coastal = " << POINTS_COASTAL << "\n";
-
-    // The family line mixes plain numbers (the bands) with points (+5),
-    // so the + sign is switched off and on around each part.
-    cout << "Affected families:   0-" << noshowpos << FAMILIES_BAND1_MAX << " = "
-         << showpos << POINTS_FAMILIES_BAND1 << ", "
-         << noshowpos << FAMILIES_BAND1_MAX + 1 << "-" << FAMILIES_BAND2_MAX << " = "
-         << showpos << POINTS_FAMILIES_BAND2 << ",\n                     "
-         << noshowpos << FAMILIES_BAND2_MAX + 1 << "-" << FAMILIES_BAND3_MAX << " = "
-         << showpos << POINTS_FAMILIES_BAND3 << ", over "
-         << noshowpos << FAMILIES_BAND3_MAX << " = ";
-
-    cout << "Medical aid needed:  Yes = " << POINTS_MEDICAL_YES
-         << ", No = " << POINTS_MEDICAL_NO << "\n";
-    cout << "Road to the area:    Open = " << POINTS_ROUTE_OPEN
-         << ", Blocked = " << POINTS_ROUTE_BLOCKED << "\n";
-    cout << "Aftershocks expected: Yes = " << POINTS_AFTERSHOCK_YES
-         << ", No = " << POINTS_AFTERSHOCK_NO << "\n";
-    cout << "Damage level:        Low = " << POINTS_DAMAGE_LOW
-         << ", Medium = " << POINTS_DAMAGE_MEDIUM
-         << ", High = " << POINTS_DAMAGE_HIGH << "\n";
-    cout << "Aid already received: Yes = " << POINTS_AID_RECEIVED_YES
-         << ", No = " << POINTS_AID_RECEIVED_NO << "\n\n";
-    cout << noshowpos;   // from here on, no + signs
-
-    cout << "A higher score means the area has a greater and more urgent need.\n";
-    cout << "Earlier aid reduces the score because that area has already been\n";
-    cout << "helped. The score is always kept between " << MIN_SCORE << " and " << MAX_SCORE << ".\n\n";
-
-    // ---- The relief table: one row per relief level ----
-    // The loop runs once for each level (0 to 4). The switch fills in the
-    // numbers for that row, then ONE block of code prints the row.
-    cout << "SUPPLY ALLOCATION BY NEED SCORE\n";
-    for (int tier = FULL_RELIEF; tier <= DEFER; tier++) {
-        int fromScore = 0;
-        int toScore = 0;
-        int tierTrucks = 0;
-        int tierPacks = 0;
-        int tierStaff = 0;
-        string tierName = "";   // names are padded with spaces to 18 letters
-
-        switch (tier) {
-            case FULL_RELIEF:
-                fromScore = THRESHOLD_FULL;     toScore = MAX_SCORE;
-                tierTrucks = FULL_TRUCKS;       tierPacks = FULL_PACKS;     tierStaff = FULL_STAFF;
-                tierName = "Full Relief       ";
-                break;
-            case STANDARD_RELIEF:
-                fromScore = THRESHOLD_STANDARD; toScore = THRESHOLD_FULL - 1;
-                tierTrucks = STANDARD_TRUCKS;   tierPacks = STANDARD_PACKS; tierStaff = STANDARD_STAFF;
-                tierName = "Standard Relief   ";
-                break;
-            case MID_RELIEF:
-                fromScore = THRESHOLD_MID;      toScore = THRESHOLD_STANDARD - 1;
-                tierTrucks = MID_TRUCKS;        tierPacks = MID_PACKS;      tierStaff = MID_STAFF;
-                tierName = "Mid-Level Relief  ";
-                break;
-            case LOW_RELIEF:
-                fromScore = THRESHOLD_LOW;      toScore = THRESHOLD_MID - 1;
-                tierTrucks = LOW_TRUCKS;        tierPacks = LOW_PACKS;      tierStaff = LOW_STAFF;
-                tierName = "Low-Level Relief  ";
-                break;
-            default:   // DEFER
-                fromScore = MIN_SCORE;          toScore = THRESHOLD_LOW - 1;
-                tierTrucks = DEFER_TRUCKS;      tierPacks = DEFER_PACKS;    tierStaff = DEFER_STAFF;
-                tierName = "Defer             ";
-                break;
-        }
-
-        // Print the row. The small "if" lines add spaces in front of
-        // short numbers so that the columns line up.
-        cout << "Need score ";
-        if (fromScore < 100) cout << " ";
-        if (fromScore < 10)  cout << " ";
-        cout << fromScore << " - ";
-        if (toScore < 100) cout << " ";
-        if (toScore < 10)  cout << " ";
-        cout << toScore << " : " << tierName << tierTrucks << " trucks, ";
-        if (tierPacks < 10) cout << " ";
-        cout << tierPacks << " supply packs, " << tierStaff << " medical staff\n";
-    }
-    cout << "\n";
-
-    cout << "IMPORTANT NOTES\n";
-    cout << "- Do not enter estimates that are not supported by field information.\n";
-    cout << "- Check that all answers and family counts are correct before submitting.\n";
-    cout << "- If supplies are not enough for the level a score deserves, the system\n";
-    cout << "  steps down to the biggest level that the remaining stock can cover.\n";
-    cout << "  Deferred areas must be recorded for the next distribution.\n";
-    cout << "- Confirm road access before dispatching trucks and coordinate medical\n";
-    cout << "  staff with the receiving relief team.\n";
+    cout << R"(EARTHQUAKE RELIEF SUPPLY SYSTEM
+Welcome. This system distributes limited relief supplies fairly
+by calculating a need score for each affected area.
+ 
+HOW TO USE THE SYSTEM
+1. Enter the name of the affected area.
+2. Choose the area type and enter the number of affected families.
+3. Answer each Yes/No question exactly as requested (y or n).
+4. Select the damage level (Low, Medium, or High).
+5. The system adds the points for every answer and calculates
+   the area's total need score (0 to 100).
+6. Supplies are assigned from the need score. Whatever is given is
+   removed from the stock, so the next area receives what is left.
+ 
+INPUTS AND NEED-SCORE POINTS
+Area type:            Plain = +10, Mountainous = +15, Coastal = +15
+Affected families:    0-20 = +5, 21-50 = +10, over 50 = +15
+Medical aid needed:   Yes = +10, No = +5
+Road to the area:     Open = +10, Blocked = -15
+Aftershocks expected: Yes = +10, No = +15
+Damage level:         Low = +5, Medium = +10, High = +20
+Aid already received: Yes = -20, No = +10
+ 
+A higher score means the area has a greater and more urgent need.
+Earlier aid reduces the score because that area has already been
+helped. The score is always kept between 0 and 100.
+ 
+SUPPLY ALLOCATION BY NEED SCORE
+Need score  90 - 100 : Full Relief       3 trucks, 50 supply packs, 5 medical staff
+Need score  70 -  89 : Standard Relief   2 trucks, 30 supply packs, 3 medical staff
+Need score  50 -  69 : Mid-Level Relief  1 truck,  20 supply packs, 2 medical staff
+Need score  20 -  49 : Low-Level Relief  1 truck,  10 supply packs, 1 medical staff
+Need score   0 -  19 : Defer             0 trucks,  0 supply packs, 1 medical staff
+ 
+IMPORTANT NOTES
+- Do not enter estimates that are not supported by field information.
+- Check that all answers and family counts are correct before submitting.
+- If supplies are not enough for the level a score deserves, the system
+  steps down to the biggest level that the remaining stock can cover.
+  Deferred areas must be recorded for the next distribution.
+- Confirm road access before dispatching trucks and coordinate medical
+  staff with the receiving relief team.
+)";
 
     //STARTING STOCK 
     // These three variables are the "warehouse". They go down every time
@@ -552,8 +483,8 @@ int main() {
 
         // Remember the stock BEFORE subtracting (needed for the shortage message)
         int trucksBefore = trucksLeft;
-        int packsBefore  = packsLeft;
-        int staffBefore  = staffLeft;
+        int packsBefore = packsLeft;
+        int staffBefore = staffLeft;
 
         // SUBTRACT WHAT WAS USED FROM THE STOCK
         //  The NEXT request will see the new values.
@@ -573,25 +504,25 @@ int main() {
         // SHOW THE REQUEST DETAILS
         cout << " REQUEST #" << requestCount << " : " << areaName << endl;
 
-        cout << " Area type            : ";
+        cout << " Area type : ";
         switch (areaType) {
-            case AREA_PLAIN:       cout << "Plain";       break;
+            case AREA_PLAIN: cout << "Plain";       break;
             case AREA_MOUNTAINOUS: cout << "Mountainous"; break;
-            case AREA_COASTAL:     cout << "Coastal";     break;
+            case AREA_COASTAL: cout << "Coastal";     break;
         }
         cout << endl;
         cout << " Affected families    : " << families << endl;
 
         // (condition ? textIfTrue : textIfFalse) is the short if-else
-        cout << " Medical aid needed   : " << (medicalAid ? "Yes" : "No") << endl;
-        cout << " Road to the area     : " << (routeOpen ? "Open" : "Blocked") << endl;
+        cout << " Medical aid needed : " << (medicalAid ? "Yes" : "No") << endl;
+        cout << " Road to the area : " << (routeOpen ? "Open" : "Blocked") << endl;
         cout << " Aftershocks expected : " << (aftershocks ? "Yes" : "No") << endl;
 
         cout << " Damage level         : ";
         switch (damage) {
-            case DAMAGE_LOW:    cout << "Low";    break;
+            case DAMAGE_LOW: cout << "Low";    break;
             case DAMAGE_MEDIUM: cout << "Medium"; break;
-            case DAMAGE_HIGH:   cout << "High";   break;
+            case DAMAGE_HIGH: cout << "High";   break;
         }
         cout << endl;
 
@@ -622,10 +553,10 @@ int main() {
                  << " (low priority)\n";
         }
 
-        cout << " ACTION TAKEN         : " << givenName << endl;
-        cout << " Trucks used          : " << trucksUsed << endl;
-        cout << " Supply packs used    : " << packsUsed << endl;
-        cout << " Medical staff used   : " << staffUsed << endl;
+        cout << " ACTION TAKEN : " << givenName << endl;
+        cout << " Trucks used : " << trucksUsed << endl;
+        cout << " Supply packs used : " << packsUsed << endl;
+        cout << " Medical staff used : " << staffUsed << endl;
         cout << "------------------------------------------------------------\n";
         cout << " REMAINING STOCK  ->  Trucks: " << trucksLeft
              << "\tPacks: " << packsLeft
@@ -647,7 +578,7 @@ int main() {
                 anotherRequest = false;
                 break;
             } else {
-                cout << "  Please type y or n.\n";
+                cout << "Please type y or n.\n";
             }
         }
     }
@@ -656,11 +587,11 @@ int main() {
     int handled = servedFully + servedReduced;   // requests that got some relief
 
     cout << "                        SUMMARY\n";
-    cout << " Total requests processed        : " << requestCount << endl;
+    cout << " Total requests processed : " << requestCount << endl;
     cout << " Served at the level they earned : " << servedFully << endl;
-    cout << " Served with REDUCED relief      : " << servedReduced << endl;
-    cout << " Deferred / could not be served  : " << deferred << endl;
-    cout << " Successfully handled (got relief): " << handled << " of " << requestCount << endl;
+    cout << " Served with REDUCED relief : " << servedReduced << endl;
+    cout << " Deferred / could not be served : " << deferred << endl;
+    cout << " Successfully handled (got relief) : " << handled << " of " << requestCount << endl;
     cout << "------------------------------------------------------------\n";
     cout << " Stock left at the end ->\tTrucks: " << trucksLeft
          << "\tPacks: " << packsLeft << "\tStaff: " << staffLeft << endl;
